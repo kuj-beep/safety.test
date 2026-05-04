@@ -1,0 +1,1904 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>심리적 안전감 진단</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://script.google.com https://script.googleusercontent.com;">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: #f5f5f5;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .screen {
+            display: none;
+            min-height: 100vh;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        /* ========== 시작 화면 ========== */
+        .start-screen {
+            background: #1a5f4a;
+            min-height: 100vh;
+            padding: 40px 20px 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .admin-link {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            color: rgba(255,255,255,0.3);
+            text-decoration: none;
+            font-size: 12px;
+        }
+
+        .admin-link:hover {
+            color: rgba(255,255,255,0.6);
+        }
+
+        .badge {
+            display: inline-block;
+            border: 2px solid #fff;
+            color: #fff;
+            padding: 8px 24px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 30px;
+        }
+
+        .start-title {
+            color: #ffffff;
+            font-size: 42px;
+            font-weight: 700;
+            text-align: center;
+            line-height: 1.4;
+            margin-bottom: 30px;
+        }
+
+        .start-description {
+            color: rgba(255,255,255,0.9);
+            text-align: center;
+            font-size: 15px;
+            line-height: 1.8;
+            margin-bottom: 40px;
+        }
+
+        .input-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 24px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .input-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .select-wrapper {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .select-box {
+            width: 100%;
+            padding: 16px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            appearance: none;
+            background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 8L1 3h10z'/%3E%3C/svg%3E") no-repeat right 16px center;
+            cursor: pointer;
+            color: #1a5f4a;
+        }
+
+        .select-box:focus {
+            outline: none;
+            border-color: #1a5f4a;
+        }
+
+        .start-btn {
+            width: 100%;
+            padding: 18px;
+            background: #4a7c6f;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .start-btn:hover {
+            background: #3d6b5f;
+        }
+
+        /* ========== 진단 안내 화면 ========== */
+        .guide-screen {
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding: 60px 20px 40px;
+        }
+
+        .guide-container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .guide-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a5f4a;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .guide-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 28px 24px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .guide-card-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .guide-card-desc {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .guide-btn {
+            width: 100%;
+            max-width: 500px;
+            margin: 30px auto 0;
+            padding: 18px;
+            background: #1a5f4a;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            display: block;
+        }
+
+        .guide-btn:hover {
+            background: #155040;
+        }
+
+        /* ========== Part 2 안내 화면 ========== */
+        .part-intro-screen {
+            background: #1a5f4a;
+            min-height: 100vh;
+            padding: 60px 20px 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .part-intro-container {
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .part-intro-title {
+            font-size: 36px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 30px;
+        }
+
+        .part-intro-desc {
+            font-size: 16px;
+            color: rgba(255,255,255,0.9);
+            line-height: 1.8;
+            margin-bottom: 40px;
+        }
+
+        .part-intro-btn {
+            width: 100%;
+            max-width: 280px;
+            padding: 18px;
+            background: transparent;
+            color: #fff;
+            border: 2px solid #fff;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .part-intro-btn:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        /* ========== 문항 응답 화면 ========== */
+        .assessment-screen {
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding: 30px 20px 40px;
+        }
+
+        .assessment-container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .progress-section {
+            margin-bottom: 30px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .part-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a5f4a;
+        }
+
+        .progress-text {
+            font-size: 14px;
+            color: #888;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: #e0e0e0;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #1a5f4a;
+            transition: width 0.3s;
+        }
+
+        .question-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 30px 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            margin-bottom: 20px;
+        }
+
+        .question-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            word-break: keep-all;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-item {
+            position: relative;
+        }
+
+        .option-input {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 16px 20px;
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option-input:checked + .option-label {
+            background: #e8f5f1;
+            border-color: #1a5f4a;
+        }
+
+        .option-score {
+            width: 32px;
+            height: 32px;
+            background: #e9ecef;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+            color: #666;
+            margin-right: 14px;
+            flex-shrink: 0;
+        }
+
+        .option-input:checked + .option-label .option-score {
+            background: #1a5f4a;
+            color: #fff;
+        }
+
+        .option-text {
+            font-size: 15px;
+            color: #333;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .nav-btn {
+            flex: 1;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .nav-btn.prev {
+            background: #e9ecef;
+            color: #495057;
+        }
+
+        .nav-btn.prev:hover {
+            background: #dee2e6;
+        }
+
+        .nav-btn.prev:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .nav-btn.next {
+            background: #1a5f4a;
+            color: #fff;
+        }
+
+        .nav-btn.next:hover {
+            background: #155040;
+        }
+
+        .nav-btn.next:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* ========== 결과 차트 화면 ========== */
+        .result-screen {
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .result-container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .result-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a5f4a;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .axis-label-y {
+            position: absolute;
+            left: -5px;
+            top: 50%;
+            transform: translateY(-50%) rotate(-90deg);
+            font-size: 13px;
+            font-weight: 600;
+            color: #666;
+            white-space: nowrap;
+        }
+
+        .axis-label-x {
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+            color: #666;
+            margin-top: 8px;
+        }
+
+        .axis-max-y {
+            position: absolute;
+            left: 25px;
+            top: 5px;
+            font-size: 12px;
+            color: #999;
+        }
+
+        .axis-min-y {
+            position: absolute;
+            left: 25px;
+            bottom: 25px;
+            font-size: 12px;
+            color: #999;
+        }
+
+        .axis-min-x {
+            position: absolute;
+            left: 40px;
+            bottom: 5px;
+            font-size: 12px;
+            color: #999;
+        }
+
+        .axis-max-x {
+            position: absolute;
+            right: 5px;
+            bottom: 5px;
+            font-size: 12px;
+            color: #999;
+        }
+
+        .quadrant-chart {
+            margin-left: 35px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            width: calc(100% - 35px);
+            aspect-ratio: 1;
+            position: relative;
+        }
+
+        .quadrant {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+        }
+
+        .quadrant-pioneer {
+            background: #e3f2fd;
+            border-radius: 16px 0 0 0;
+        }
+
+        .quadrant-cocreator {
+            background: #e8f5e9;
+            border-radius: 0 16px 0 0;
+        }
+
+        .quadrant-drifter {
+            background: #fce4ec;
+            border-radius: 0 0 0 16px;
+        }
+
+        .quadrant-beneficiary {
+            background: #fff9c4;
+            border-radius: 0 0 16px 0;
+        }
+
+        .quadrant-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 4px;
+            text-align: center;
+        }
+
+        .quadrant-subtitle {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .my-position {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: rgba(229, 57, 53, 0.6);
+            border: 3px solid #c62828;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+        }
+
+        .score-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .score-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .score-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .score-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #1a5f4a;
+        }
+
+        .score-value span {
+            font-size: 18px;
+            font-weight: 400;
+            color: #999;
+        }
+
+        .result-btn {
+            width: 100%;
+            padding: 18px;
+            background: #1a5f4a;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 12px;
+        }
+
+        .result-btn:hover {
+            background: #155040;
+        }
+
+        .restart-btn {
+            width: 100%;
+            padding: 16px;
+            background: #fff;
+            color: #666;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .restart-btn:hover {
+            background: #f5f5f5;
+        }
+
+        /* ========== 결과 해석 화면 ========== */
+        .interpret-screen {
+            background: linear-gradient(180deg, #e8f5e9 0%, #f5f5f5 30%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .interpret-container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .type-badge {
+            display: inline-block;
+            background: #43a047;
+            color: #fff;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 16px;
+        }
+
+        .type-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .type-name {
+            font-size: 28px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 6px;
+        }
+
+        .type-name-en {
+            font-size: 16px;
+            color: #666;
+        }
+
+        .interpret-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .interpret-card-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1a5f4a;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .interpret-card-desc {
+            font-size: 15px;
+            color: #444;
+            line-height: 1.8;
+        }
+
+        .strength-list {
+            list-style: none;
+        }
+
+        .strength-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 14px;
+            font-size: 15px;
+            color: #444;
+            line-height: 1.6;
+        }
+
+        .strength-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .strength-dot {
+            width: 8px;
+            height: 8px;
+            background: #43a047;
+            border-radius: 50%;
+            margin-right: 12px;
+            margin-top: 8px;
+            flex-shrink: 0;
+        }
+
+        .back-btn {
+            width: 100%;
+            padding: 16px;
+            background: #fff;
+            color: #666;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .back-btn:hover {
+            background: #f5f5f5;
+        }
+
+        /* ========== 관리자 화면 ========== */
+        .admin-screen {
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding: 30px 20px;
+        }
+
+        .admin-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .admin-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .admin-close {
+            padding: 8px 16px;
+            background: #e9ecef;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .admin-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .admin-tab {
+            flex: 1;
+            padding: 12px;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .admin-tab.active {
+            background: #1a5f4a;
+            color: #fff;
+            border-color: #1a5f4a;
+        }
+
+        .admin-panel {
+            display: none;
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .admin-panel.active {
+            display: block;
+        }
+
+        .stat-grid {
+            display: grid;
+            gap: 16px;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .stat-row:last-child {
+            border-bottom: none;
+        }
+
+        .stat-dept {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .stat-scores {
+            display: flex;
+            gap: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 12px 8px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .data-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .delete-btn {
+            padding: 6px 12px;
+            background: #fee;
+            color: #c00;
+            border: none;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .delete-btn:hover {
+            background: #fdd;
+        }
+
+        .admin-actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .admin-action-btn {
+            padding: 10px 16px;
+            background: #1a5f4a;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .admin-action-btn:hover {
+            background: #155040;
+        }
+
+        .admin-action-btn.danger {
+            background: #dc3545;
+        }
+
+        .admin-action-btn.danger:hover {
+            background: #c82333;
+        }
+
+        .type-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .type-stat-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .type-stat-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .type-stat-count {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a5f4a;
+        }
+
+        .type-stat-percent {
+            font-size: 13px;
+            color: #666;
+        }
+
+        /* ========== 로그인 모달 ========== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: #fff;
+            border-radius: 16px;
+            padding: 30px;
+            width: 90%;
+            max-width: 360px;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 15px;
+            margin-bottom: 12px;
+        }
+
+        .modal-input:focus {
+            outline: none;
+            border-color: #1a5f4a;
+        }
+
+        .modal-btn {
+            width: 100%;
+            padding: 14px;
+            background: #1a5f4a;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        .modal-cancel {
+            width: 100%;
+            padding: 12px;
+            background: #f5f5f5;
+            color: #666;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .error-text {
+            color: #dc3545;
+            font-size: 13px;
+            text-align: center;
+            margin-bottom: 10px;
+            display: none;
+        }
+
+        /* 알림 토스트 */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: #fff;
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-size: 14px;
+            z-index: 2000;
+            display: none;
+        }
+
+        .toast.show {
+            display: block;
+            animation: fadeInOut 2.5s ease;
+        }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            15% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            85% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            100% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+    
+        /* 유형별 결과 해석 화면 배경색 */
+        .interpret-screen.type-pioneer {
+            background: linear-gradient(180deg, #e3f2fd 0%, #f5f5f5 30%);
+        }
+        .interpret-screen.type-cocreator {
+            background: linear-gradient(180deg, #e8f5e9 0%, #f5f5f5 30%);
+        }
+        .interpret-screen.type-drifter {
+            background: linear-gradient(180deg, #fce4ec 0%, #f5f5f5 30%);
+        }
+        .interpret-screen.type-beneficiary {
+            background: linear-gradient(180deg, #fff9c4 0%, #f5f5f5 30%);
+        }
+
+        /* 유형별 배지 색상 */
+        .type-badge.type-pioneer {
+            background: #1976d2;
+        }
+        .type-badge.type-cocreator {
+            background: #43a047;
+        }
+        .type-badge.type-drifter {
+            background: #e91e63;
+        }
+        .type-badge.type-beneficiary {
+            background: #fbc02d;
+            color: #333;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- 시작 화면 -->
+    <div class="screen active" id="startScreen">
+        <div class="start-screen">
+            <a href="#" class="admin-link" id="adminLink">관리자</a>
+            <div class="badge">OURHOME Culture Trip</div>
+            <h1 class="start-title">나의 심리적안전감<br>진단하기</h1>
+            <p class="start-description">
+                나는 우리팀에서 얼마나 안전하다고 느끼고 있을까요?<br>
+                그리고 나는 동료에게 얼마나 안전감을 주고 있을까요?<br><br>
+                간단한 진단을 통해 나의 심리적 안전감 점수를 확인해보세요!
+            </p>
+            <div class="input-card">
+                <label class="input-label">소속 사업부를 선택해주세요</label>
+                <div class="select-wrapper">
+                    <select class="select-box" id="departmentSelect">
+                        <option value="">선택해주세요</option>
+                        <option value="MCP사업부">MCP사업부</option>
+                        <option value="TFS사업부">TFS사업부</option>
+                        <option value="GP사업부">GP사업부</option>
+                        <option value="상품사업부">상품사업부</option>
+                        <option value="R&D본부">R&D본부</option>
+                        <option value="제조본부">제조본부</option>
+                        <option value="물류본부">물류본부</option>
+                        <option value="MD본부">MD본부</option>
+                        <option value="전략실">전략실</option>
+                        <option value="기획실">기획실</option>
+                        <option value="재무실">재무실</option>
+                        <option value="경영지원실">경영지원실</option>
+                        <option value="안전환경실">안전환경실</option>
+                        <option value="준법지원실">준법지원실</option>
+                    </select>
+                </div>
+                <button class="start-btn" id="startBtn">시작하기</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 진단 안내 화면 -->
+    <div class="screen" id="guideScreen">
+        <div class="guide-screen">
+            <div class="guide-container">
+                <h2 class="guide-title">진단 안내</h2>
+                <div class="guide-card">
+                    <h3 class="guide-card-title">정답은 없습니다</h3>
+                    <p class="guide-card-desc">솔직하게 평소 느끼는 대로 응답해주세요.</p>
+                </div>
+                <div class="guide-card">
+                    <h3 class="guide-card-title">교육 목적으로만 사용됩니다</h3>
+                    <p class="guide-card-desc">응답 결과는 교육 목적 외 사용되지 않습니다.</p>
+                </div>
+                <div class="guide-card">
+                    <h3 class="guide-card-title">검사시간은 약 2~3분 소요됩니다</h3>
+                    <p class="guide-card-desc">Part 1과 Part 2, 총 17개 문항을 응답합니다.</p>
+                </div>
+                <button class="guide-btn" id="guideNextBtn">진단 시작하기</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Part 1 안내 화면 -->
+    <div class="screen" id="part1IntroScreen">
+        <div class="part-intro-screen">
+            <div class="part-intro-container">
+                <h2 class="part-intro-title">Part 1 : 내가 느끼는 안전감</h2>
+                <p class="part-intro-desc">
+                    먼저 Part 1입니다.<br><br>
+                    나는 우리 팀에서 얼마나 안전감을 느끼는지<br>
+                    총 7개 문항에 응답해주세요.
+                </p>
+                <button class="part-intro-btn" id="part1StartBtn">시작하기</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Part 2 안내 화면 -->
+    <div class="screen" id="part2IntroScreen">
+        <div class="part-intro-screen">
+            <div class="part-intro-container">
+                <h2 class="part-intro-title">Part 2 : 내가 만드는 안전감</h2>
+                <p class="part-intro-desc">
+                    이제 Part 2입니다.<br><br>
+                    나는 동료에게 얼마나 안전감을 주고 있는지<br>
+                    총 10개 문항에 응답해주세요.
+                </p>
+                <button class="part-intro-btn" id="part2StartBtn">계속하기</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 문항 응답 화면 -->
+    <div class="screen" id="assessmentScreen">
+        <div class="assessment-screen">
+            <div class="assessment-container">
+                <div class="progress-section">
+                    <div class="progress-header">
+                        <span class="part-label" id="partLabel">Part 1 : 내가 느끼는 안전감</span>
+                        <span class="progress-text" id="progressText">1 / 17</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill" style="width: 5.88%"></div>
+                    </div>
+                </div>
+                <div class="question-card">
+                    <p class="question-text" id="questionText">질문이 여기에 표시됩니다.</p>
+                    <div class="options-list" id="optionsList">
+                        <!-- 옵션들이 동적으로 생성됩니다 -->
+                    </div>
+                </div>
+                <div class="nav-buttons">
+                    <button class="nav-btn prev" id="prevBtn" disabled>이전</button>
+                    <button class="nav-btn next" id="nextBtn" disabled>다음</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 결과 차트 화면 -->
+    <div class="screen" id="resultScreen">
+        <div class="result-screen">
+            <div class="result-container">
+                <h2 class="result-title">심리적 안전감 진단 결과</h2>
+                <div class="chart-wrapper">
+                    <span class="axis-label-y">Part 2</span>
+                    <span class="axis-max-y">5</span>
+                    <span class="axis-min-y">1</span>
+                    <span class="axis-min-x">1</span>
+                    <span class="axis-max-x">5</span>
+                    <div class="quadrant-chart" id="quadrantChart">
+                        <div class="quadrant quadrant-pioneer">
+                            <span class="quadrant-title">안전감 개척자</span>
+                            <span class="quadrant-subtitle">Pioneer</span>
+                        </div>
+                        <div class="quadrant quadrant-cocreator">
+                            <span class="quadrant-title">안전감 공동창출자</span>
+                            <span class="quadrant-subtitle">Co-Creator</span>
+                        </div>
+                        <div class="quadrant quadrant-drifter">
+                            <span class="quadrant-title">안전감 표류자</span>
+                            <span class="quadrant-subtitle">Drifter</span>
+                        </div>
+                        <div class="quadrant quadrant-beneficiary">
+                            <span class="quadrant-title">안전감 수혜자</span>
+                            <span class="quadrant-subtitle">Beneficiary</span>
+                        </div>
+                        <div class="my-position" id="myPosition"></div>
+                    </div>
+                    <div class="axis-label-x">Part 1</div>
+                </div>
+                <div class="score-cards">
+                    <div class="score-card">
+                        <div class="score-label">Part 1 점수</div>
+                        <div class="score-value"><span id="part1Score">0.0</span><span> / 5</span></div>
+                    </div>
+                    <div class="score-card">
+                        <div class="score-label">Part 2 점수</div>
+                        <div class="score-value"><span id="part2Score">0.0</span><span> / 5</span></div>
+                    </div>
+                </div>
+                <button class="result-btn" id="detailBtn">자세히 확인하기</button>
+                <button class="restart-btn" id="restartBtn">다시 진단하기</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 결과 해석 화면 -->
+    <div class="screen" id="interpretScreen">
+        <div class="interpret-screen">
+            <div class="interpret-container">
+                <div class="type-header">
+                    <span class="type-badge">나의 유형</span>
+                    <h2 class="type-name" id="typeName">안전감 공동창출자</h2>
+                    <p class="type-name-en" id="typeNameEn">Co-Creator</p>
+                </div>
+                <div class="interpret-card">
+                    <h3 class="interpret-card-title">나의 유형 설명</h3>
+                    <p class="interpret-card-desc" id="typeDesc">설명이 여기에 표시됩니다.</p>
+                </div>
+                <div class="interpret-card">
+                    <h3 class="interpret-card-title">강점</h3>
+                    <ul class="strength-list" id="strengthList">
+                        <!-- 강점들이 동적으로 생성됩니다 -->
+                    </ul>
+                </div>
+                <button class="back-btn" id="backToResultBtn">결과 차트로 돌아가기</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 관리자 화면 -->
+    <div class="screen" id="adminScreen">
+        <div class="admin-screen">
+            <div class="admin-container">
+                <div class="admin-header">
+                    <h2 class="admin-title">관리자 페이지</h2>
+                    <button class="admin-close" id="adminCloseBtn">닫기</button>
+                </div>
+                <div class="admin-tabs">
+                    <button class="admin-tab active" data-tab="stats">조직별 통계</button>
+                    <button class="admin-tab" data-tab="data">응답 데이터</button>
+                    <button class="admin-tab" data-tab="types">유형별 분포</button>
+                </div>
+                <div class="admin-panel active" id="statsPanel">
+                    <div class="stat-grid" id="statGrid">
+                        <div class="no-data">데이터를 불러오는 중...</div>
+                    </div>
+                </div>
+                <div class="admin-panel" id="dataPanel">
+                    <div class="admin-actions">
+                        <button class="admin-action-btn" id="downloadExcelBtn">엑셀 다운로드</button>
+                        <button class="admin-action-btn danger" id="deleteAllBtn">전체 삭제</button>
+                    </div>
+                    <div id="dataTableContainer">
+                        <div class="no-data">데이터를 불러오는 중...</div>
+                    </div>
+                </div>
+                <div class="admin-panel" id="typesPanel">
+                    <div class="type-grid" id="typeGrid">
+                        <div class="no-data">데이터를 불러오는 중...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 로그인 모달 -->
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal">
+            <h3 class="modal-title">관리자 로그인</h3>
+            <input type="text" class="modal-input" id="adminId" placeholder="아이디">
+            <input type="password" class="modal-input" id="adminPw" placeholder="비밀번호">
+            <p class="error-text" id="loginError">아이디 또는 비밀번호가 올바르지 않습니다.</p>
+            <button class="modal-btn" id="loginBtn">로그인</button>
+            <button class="modal-cancel" id="loginCancelBtn">취소</button>
+        </div>
+    </div>
+
+    <!-- 토스트 알림 -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // Google Apps Script URL
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz_At5KO70KgGHNxmmSpAvbVf_t5UrdS8KxSVEBC-RzB2cc4tVeXg9uEtkrW5RigywV/exec';
+
+        // 문항 데이터
+        const questions = {
+            part1: [
+                { text: "우리 팀에서 실수를 하더라도, 그것이 나를 깎아내리는 데 사용되지 않는다.", reverse: false },
+                { text: "우리 팀에서 실수를 하면 종종 그 일로 책임을 추궁당한다.", reverse: true },
+                { text: "우리 팀원들은 까다로운 문제나 민감한 이슈도 꺼내 놓고 이야기할 수 있다.", reverse: false },
+                { text: "우리 팀에서는 다른 사람과 다르다는 이유로 거부당하는 일이 있다.", reverse: true },
+                { text: "우리 팀에서는 있는 그대로의 나 자신으로 일하는 것이 편안하다.", reverse: false },
+                { text: "우리 팀의 누구도 의도적으로 내 업무를 방해하는 행동을 하지 않는다.", reverse: false },
+                { text: "우리 팀에서 새로운 시도나 위험을 감수하는 것은 안전한 일이다.", reverse: false }
+            ],
+            part2: [
+                { text: "나는 동료의 새로운 아이디어를 들을 때 마음을 열고 경청한다.", reverse: false },
+                { text: "나는 나와 다른 의견이 제시되어도 끝까지 듣고 진지하게 검토한다.", reverse: false },
+                { text: "나는 동료가 업무상 어려움을 상의하고 싶을 때 기꺼이 시간을 내준다.", reverse: false },
+                { text: "나는 동료가 떠오르는 이슈에 대해 언제든 나에게 다가올 수 있도록 접근 가능한 태도를 보인다.", reverse: false },
+                { text: "나는 회의에서 발언이 적은 사람의 의견을 의도적으로 묻고 초대한다.", reverse: false },
+                { text: "나는 동료의 기여를 구체적으로 언급하며 감사·인정을 표현한다.", reverse: false },
+                { text: "나는 업무 방식이 더 나아질 수 있다고 생각될 때 건설적으로 의견을 제시한다.", reverse: false },
+                { text: "나는 모두에게 영향을 주는 문제에 대해 솔직하게 발언한다.", reverse: false },
+                { text: "나는 동료가 어려움을 겪을 때 먼저 다가가 도움을 제공한다.", reverse: false },
+                { text: "나는 내 실수를 솔직하게 공유하여 팀이 함께 배울 수 있도록 한다.", reverse: false }
+            ]
+        };
+
+        // 결과 유형 데이터
+        const resultTypes = {
+            "co-creator": {
+                name: "안전감 공동창출자",
+                nameEn: "Co-Creator",
+                desc: "스스로 팀 안에서 충분한 심리적 안전감을 경험하면서, 동시에 자신의 말과 행동을 통해 동료에게도 안전감을 만들어 주는 사람입니다. 받은 것을 누리는 데 그치지 않고, 그것을 다시 주변으로 환원하는 선순환의 주체입니다.",
+                strengths: [
+                    "솔직한 발언과 경청을 통해 팀의 학습 행동을 촉진함",
+                    "실수를 공유하고 피드백을 적극적으로 주고받으며 모범을 보임",
+                    "다양한 의견을 초대하고 인정함으로써 팀의 집단지성을 끌어올림",
+                    "신입이나 소수 의견자에게도 안전한 발언 공간을 열어줌"
+                ]
+            },
+            "beneficiary": {
+                name: "안전감 수혜자",
+                nameEn: "Beneficiary",
+                desc: "팀이 제공하는 심리적 안전감의 혜택은 충분히 누리고 있지만, 본인이 동료에게 안전감을 만들어 주는 행동은 상대적으로 부족합니다. 안전한 환경에 잘 적응한 구성원이지만, 아직 그 안전감의 공급자(supplier)로는 자리 잡지 못한 단계입니다.",
+                strengths: [
+                    "팀 환경을 신뢰하고 편안하게 일할 수 있는 안정적 토대 보유",
+                    "자기 업무에 집중하며 일정한 성과를 내는 성실한 구성원",
+                    "이미 안전감의 '맛'을 알기에, 만드는 행동 학습 시 빠른 전환 가능"
+                ]
+            },
+            "pioneer": {
+                name: "안전감 개척자",
+                nameEn: "Pioneer",
+                desc: "본인이 느끼는 심리적 안전감은 낮지만, 그럼에도 불구하고 동료에게 안전감을 만들어 주려고 노력하는 사람입니다. 받은 것이 적음에도 먼저 베푸는 행동을 시작한 변화의 씨앗이며, 팀 문화 전환의 가장 강력한 촉매가 될 수 있는 유형입니다.",
+                strengths: [
+                    "환경에 휘둘리지 않는 강한 내적 가치관과 책임감",
+                    "어려운 상황에서도 발언하고 도움을 주는 용기와 회복탄력성",
+                    "변화의 출발점을 만들 수 있는 의식적 행위자(conscious agent)",
+                    "동료의 어려움에 깊이 공감할 수 있는 정서적 통찰력"
+                ]
+            },
+            "drifter": {
+                name: "안전감 표류자",
+                nameEn: "Drifter",
+                desc: "스스로도 팀 안에서 안전감을 충분히 느끼지 못하고, 동료에게도 안전감을 만들어 주는 행동이 부족한 상태입니다. 환경과 행동 모두에서 단절·고립의 신호가 감지되는 상태로, 개인의 노력만으로는 회복이 어렵고 팀·리더 차원의 적극적 개입이 가장 시급한 그룹입니다.",
+                strengths: [
+                    "현재 상태가 본래 성향이 아닌 환경·맥락의 결과일 가능성이 큼",
+                    "적절한 지원 시 빠른 회복 가능",
+                    "침묵 속에서도 팀의 문제점을 가장 예민하게 관찰하고 있을 수 있음"
+                ]
+            }
+        };
+
+        // 상태 변수
+        let currentScreen = 'start';
+        let selectedDepartment = '';
+        let currentQuestionIndex = 0;
+        let answers = new Array(17).fill(null);
+        let part1Score = 0;
+        let part2Score = 0;
+        let resultType = '';
+
+        // DOM 요소
+        const screens = {
+            start: document.getElementById('startScreen'),
+            guide: document.getElementById('guideScreen'),
+            part1Intro: document.getElementById('part1IntroScreen'),
+            part2Intro: document.getElementById('part2IntroScreen'),
+            assessment: document.getElementById('assessmentScreen'),
+            result: document.getElementById('resultScreen'),
+            interpret: document.getElementById('interpretScreen'),
+            admin: document.getElementById('adminScreen')
+        };
+
+        // 화면 전환 함수
+        function showScreen(screenName) {
+            Object.values(screens).forEach(screen => screen.classList.remove('active'));
+            screens[screenName].classList.add('active');
+            currentScreen = screenName;
+            window.scrollTo(0, 0);
+        }
+
+        // 토스트 메시지 표시
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2500);
+        }
+
+        // 시작하기 버튼
+        document.getElementById('startBtn').addEventListener('click', function() {
+            selectedDepartment = document.getElementById('departmentSelect').value;
+            if (!selectedDepartment) {
+                showToast('소속 사업부를 선택해주세요.');
+                return;
+            }
+            showScreen('guide');
+        });
+
+        // 진단 안내 다음 버튼
+        document.getElementById('guideNextBtn').addEventListener('click', function() {
+            currentQuestionIndex = 0;
+            showScreen('part1Intro');
+        });
+
+        // Part 1 시작 버튼
+        document.getElementById('part1StartBtn').addEventListener('click', function() {
+            renderQuestion();
+            showScreen('assessment');
+        });
+
+        // Part 2 시작 버튼
+        document.getElementById('part2StartBtn').addEventListener('click', function() {
+            renderQuestion();
+            showScreen('assessment');
+        });
+
+        // 문항 렌더링
+        function renderQuestion() {
+            const totalQuestions = questions.part1.length + questions.part2.length;
+            const isPart1 = currentQuestionIndex < questions.part1.length;
+
+            let question;
+            if (isPart1) {
+                question = questions.part1[currentQuestionIndex];
+                document.getElementById('partLabel').textContent = 'Part 1 : 내가 느끼는 안전감';
+            } else {
+                question = questions.part2[currentQuestionIndex - questions.part1.length];
+                document.getElementById('partLabel').textContent = 'Part 2 : 내가 만드는 안전감';
+            }
+
+            document.getElementById('progressText').textContent = `${currentQuestionIndex + 1} / ${totalQuestions}`;
+            document.getElementById('progressFill').style.width = `${((currentQuestionIndex + 1) / totalQuestions) * 100}%`;
+            document.getElementById('questionText').textContent = question.text;
+
+            const optionsList = document.getElementById('optionsList');
+            const options = [
+                { score: 1, text: '전혀 그렇지 않다' },
+                { score: 2, text: '그렇지 않은 편이다' },
+                { score: 3, text: '보통이다' },
+                { score: 4, text: '그런 편이다' },
+                { score: 5, text: '매우 그렇다' }
+            ];
+
+            optionsList.innerHTML = options.map(opt => `
+                <div class="option-item">
+                    <input type="radio" class="option-input" name="answer" id="opt${opt.score}" value="${opt.score}" 
+                        ${answers[currentQuestionIndex] === opt.score ? 'checked' : ''}>
+                    <label class="option-label" for="opt${opt.score}">
+                        <span class="option-score">${opt.score}</span>
+                        <span class="option-text">${opt.text}</span>
+                    </label>
+                </div>
+            `).join('');
+
+            // 라디오 버튼 이벤트
+            document.querySelectorAll('.option-input').forEach(input => {
+                input.addEventListener('change', function() {
+                    answers[currentQuestionIndex] = parseInt(this.value);
+                    updateNavButtons();
+                });
+            });
+
+            updateNavButtons();
+        }
+
+        // 네비게이션 버튼 상태 업데이트
+        function updateNavButtons() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+
+            prevBtn.disabled = currentQuestionIndex === 0;
+            nextBtn.disabled = answers[currentQuestionIndex] === null;
+
+            const totalQuestions = questions.part1.length + questions.part2.length;
+            nextBtn.textContent = currentQuestionIndex === totalQuestions - 1 ? '결과 보기' : '다음';
+        }
+
+        // 이전 버튼
+        document.getElementById('prevBtn').addEventListener('click', function() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                renderQuestion();
+            }
+        });
+
+        // 다음 버튼
+        document.getElementById('nextBtn').addEventListener('click', function() {
+            const totalQuestions = questions.part1.length + questions.part2.length;
+
+            if (currentQuestionIndex < totalQuestions - 1) {
+                currentQuestionIndex++;
+
+                // Part 2 시작 전 안내 화면
+                if (currentQuestionIndex === questions.part1.length) {
+                    showScreen('part2Intro');
+                } else {
+                    renderQuestion();
+                }
+            } else {
+                // 모든 문항 완료 - 결과 계산
+                calculateResult();
+            }
+        });
+
+        // 결과 계산
+        function calculateResult() {
+            // Part 1 점수 계산 (역채점 처리)
+            let part1Total = 0;
+            for (let i = 0; i < questions.part1.length; i++) {
+                let score = answers[i];
+                if (questions.part1[i].reverse) {
+                    score = 6 - score;
+                }
+                part1Total += score;
+            }
+            part1Score = Math.round((part1Total / questions.part1.length) * 10) / 10;
+
+            // Part 2 점수 계산
+            let part2Total = 0;
+            for (let i = 0; i < questions.part2.length; i++) {
+                part2Total += answers[questions.part1.length + i];
+            }
+            part2Score = Math.round((part2Total / questions.part2.length) * 10) / 10;
+
+            // 유형 결정
+            const threshold = 3;
+            if (part1Score >= threshold && part2Score >= threshold) {
+                resultType = 'co-creator';
+            } else if (part1Score >= threshold && part2Score < threshold) {
+                resultType = 'beneficiary';
+            } else if (part1Score < threshold && part2Score >= threshold) {
+                resultType = 'pioneer';
+            } else {
+                resultType = 'drifter';
+            }
+
+            // 결과 화면 업데이트
+            document.getElementById('part1Score').textContent = part1Score.toFixed(1);
+            document.getElementById('part2Score').textContent = part2Score.toFixed(1);
+
+            // 4사분면에 위치 표시
+            const chart = document.getElementById('quadrantChart');
+            const position = document.getElementById('myPosition');
+            const xPercent = ((part1Score - 1) / 4) * 100;
+            const yPercent = 100 - ((part2Score - 1) / 4) * 100;
+            position.style.left = `${xPercent}%`;
+            position.style.top = `${yPercent}%`;
+
+            // 데이터 저장
+            saveResult();
+
+            showScreen('result');
+        }
+
+        // 결과 저장
+        async function saveResult() {
+            const data = {
+                action: 'save',
+                department: selectedDepartment,
+                part1Score: part1Score,
+                part2Score: part2Score,
+                resultType: resultTypes[resultType].name,
+                part1Answers: answers.slice(0, questions.part1.length),
+                part2Answers: answers.slice(questions.part1.length)
+            };
+
+            try {
+                await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+            } catch (error) {
+                console.log('데이터 저장 중 오류:', error);
+            }
+        }
+
+        // 자세히 확인하기 버튼
+        document.getElementById('detailBtn').addEventListener('click', function() {
+            const type = resultTypes[resultType];
+            document.getElementById('typeName').textContent = type.name;
+            document.getElementById('typeNameEn').textContent = type.nameEn;
+            document.getElementById('typeDesc').textContent = type.desc;
+
+            const strengthList = document.getElementById('strengthList');
+            strengthList.innerHTML = type.strengths.map(s => `
+                <li class="strength-item">
+                    <span class="strength-dot"></span>
+                    <span>${s}</span>
+                </li>
+            `).join('');
+
+            // 유형별 배경색 및 배지색 적용
+            const interpretScreen = document.querySelector('.interpret-screen');
+            const typeBadge = document.querySelector('.type-badge');
+
+            // 기존 유형 클래스 제거
+            interpretScreen.classList.remove('type-pioneer', 'type-cocreator', 'type-drifter', 'type-beneficiary');
+            typeBadge.classList.remove('type-pioneer', 'type-cocreator', 'type-drifter', 'type-beneficiary');
+
+            // 현재 유형 클래스 추가 (co-creator -> cocreator로 변환)
+            const typeClassMap = {
+                'co-creator': 'type-cocreator',
+                'beneficiary': 'type-beneficiary',
+                'pioneer': 'type-pioneer',
+                'drifter': 'type-drifter'
+            };
+            const typeClass = typeClassMap[resultType];
+            interpretScreen.classList.add(typeClass);
+            typeBadge.classList.add(typeClass);
+
+            showScreen('interpret');
+        });
+
+        // 결과 차트로 돌아가기
+        document.getElementById('backToResultBtn').addEventListener('click', function() {
+            showScreen('result');
+        });
+
+        // 다시 진단하기
+        document.getElementById('restartBtn').addEventListener('click', function() {
+            currentQuestionIndex = 0;
+            answers = new Array(17).fill(null);
+            part1Score = 0;
+            part2Score = 0;
+            resultType = '';
+            document.getElementById('departmentSelect').value = '';
+            selectedDepartment = '';
+            showScreen('start');
+        });
+
+        // 관리자 링크
+        document.getElementById('adminLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('loginModal').classList.add('active');
+        });
+
+        // 로그인
+        document.getElementById('loginBtn').addEventListener('click', function() {
+            const id = document.getElementById('adminId').value;
+            const pw = document.getElementById('adminPw').value;
+
+            if (id === 'hrd' && pw === 'Ourhome1!') {
+                document.getElementById('loginModal').classList.remove('active');
+                document.getElementById('adminId').value = '';
+                document.getElementById('adminPw').value = '';
+                document.getElementById('loginError').style.display = 'none';
+                loadAdminData();
+                showScreen('admin');
+            } else {
+                document.getElementById('loginError').style.display = 'block';
+            }
+        });
+
+        // 로그인 취소
+        document.getElementById('loginCancelBtn').addEventListener('click', function() {
+            document.getElementById('loginModal').classList.remove('active');
+            document.getElementById('adminId').value = '';
+            document.getElementById('adminPw').value = '';
+            document.getElementById('loginError').style.display = 'none';
+        });
+
+        // 관리자 닫기
+        document.getElementById('adminCloseBtn').addEventListener('click', function() {
+            showScreen('start');
+        });
+
+        // 관리자 탭 전환
+        document.querySelectorAll('.admin-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
+                this.classList.add('active');
+                document.getElementById(this.dataset.tab + 'Panel').classList.add('active');
+            });
+        });
+
+        // 관리자 데이터 로드
+        let adminData = [];
+
+        async function loadAdminData() {
+            try {
+                const response = await fetch(`${SCRIPT_URL}?action=getData`);
+                const result = await response.json();
+                if (result.success) {
+                    adminData = result.data || [];
+                    renderAdminStats();
+                    renderAdminData();
+                    renderTypeStats();
+                }
+            } catch (error) {
+                console.log('데이터 로드 중 오류:', error);
+                adminData = [];
+                renderAdminStats();
+                renderAdminData();
+                renderTypeStats();
+            }
+        }
+
+        // 조직별 통계 렌더링
+        function renderAdminStats() {
+            const statGrid = document.getElementById('statGrid');
+
+            if (adminData.length === 0) {
+                statGrid.innerHTML = '<div class="no-data">아직 응답 데이터가 없습니다.</div>';
+                return;
+            }
+
+            const deptStats = {};
+            adminData.forEach(item => {
+                if (!deptStats[item.department]) {
+                    deptStats[item.department] = { count: 0, part1Sum: 0, part2Sum: 0 };
+                }
+                deptStats[item.department].count++;
+                deptStats[item.department].part1Sum += parseFloat(item.part1Score);
+                deptStats[item.department].part2Sum += parseFloat(item.part2Score);
+            });
+
+            let html = '';
+            Object.keys(deptStats).sort().forEach(dept => {
+                const stats = deptStats[dept];
+                const part1Avg = (stats.part1Sum / stats.count).toFixed(1);
+                const part2Avg = (stats.part2Sum / stats.count).toFixed(1);
+                html += `
+                    <div class="stat-row">
+                        <span class="stat-dept">${dept} (${stats.count}명)</span>
+                        <div class="stat-scores">
+                            <span>Part1: ${part1Avg}</span>
+                            <span>Part2: ${part2Avg}</span>
+                        </div>
+                    </div>
+                `;
+            });
+
+            statGrid.innerHTML = html;
+        }
+
+        // 응답 데이터 렌더링
+        function renderAdminData() {
+            const container = document.getElementById('dataTableContainer');
+
+            if (adminData.length === 0) {
+                container.innerHTML = '<div class="no-data">아직 응답 데이터가 없습니다.</div>';
+                return;
+            }
+
+            let html = `
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>제출시간</th>
+                            <th>사업부</th>
+                            <th>P1</th>
+                            <th>P2</th>
+                            <th>유형</th>
+                            <th>삭제</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            adminData.forEach(item => {
+                html += `
+                    <tr>
+                        <td>${item.timestamp}</td>
+                        <td>${item.department}</td>
+                        <td>${parseFloat(item.part1Score).toFixed(1)}</td>
+                        <td>${parseFloat(item.part2Score).toFixed(1)}</td>
+                        <td>${item.resultType}</td>
+                        <td><button class="delete-btn" data-id="${item.id}">삭제</button></td>
+                    </tr>
+                `;
+            });
+
+            html += '</tbody></table>';
+            container.innerHTML = html;
+
+            // 삭제 버튼 이벤트
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', async function() {
+                    if (confirm('이 응답을 삭제하시겠습니까?')) {
+                        await deleteData(this.dataset.id);
+                    }
+                });
+            });
+        }
+
+        // 유형별 분포 렌더링
+        function renderTypeStats() {
+            const typeGrid = document.getElementById('typeGrid');
+
+            if (adminData.length === 0) {
+                typeGrid.innerHTML = '<div class="no-data">아직 응답 데이터가 없습니다.</div>';
+                return;
+            }
+
+            const typeCount = {
+                '안전감 공동창출자': 0,
+                '안전감 수혜자': 0,
+                '안전감 개척자': 0,
+                '안전감 표류자': 0
+            };
+
+            adminData.forEach(item => {
+                if (typeCount.hasOwnProperty(item.resultType)) {
+                    typeCount[item.resultType]++;
+                }
+            });
+
+            const total = adminData.length;
+            let html = '';
+            Object.keys(typeCount).forEach(type => {
+                const count = typeCount[type];
+                const percent = total > 0 ? Math.round((count / total) * 100) : 0;
+                html += `
+                    <div class="type-stat-card">
+                        <div class="type-stat-name">${type}</div>
+                        <div class="type-stat-count">${count}</div>
+                        <div class="type-stat-percent">${percent}%</div>
+                    </div>
+                `;
+            });
+
+            typeGrid.innerHTML = html;
+        }
+
+        // 데이터 삭제
+        async function deleteData(id) {
+            try {
+                await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'delete', id: id })
+                });
+                showToast('삭제되었습니다.');
+                setTimeout(() => loadAdminData(), 1000);
+            } catch (error) {
+                console.log('삭제 중 오류:', error);
+            }
+        }
+
+        // 전체 삭제
+        document.getElementById('deleteAllBtn').addEventListener('click', async function() {
+            if (confirm('모든 응답 데이터를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.')) {
+                try {
+                    await fetch(SCRIPT_URL, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ action: 'deleteAll' })
+                    });
+                    showToast('전체 삭제되었습니다.');
+                    setTimeout(() => loadAdminData(), 1000);
+                } catch (error) {
+                    console.log('전체 삭제 중 오류:', error);
+                }
+            }
+        });
+
+        // 엑셀 다운로드 (Google Sheets 직접 다운로드)
+document.getElementById('downloadExcelBtn').addEventListener('click', async function() {
+    try {
+        showToast('다운로드 준비 중...');
+        
+        const response = await fetch(`${SCRIPT_URL}?action=getSheetUrl`);
+        const result = await response.json();
+        
+        if (result.success) {
+            // Google Sheets를 Excel 형식으로 다운로드
+            window.open(result.url, '_blank');
+            showToast('다운로드가 시작됩니다.');
+        } else {
+            showToast('다운로드 실패: ' + result.error);
+        }
+    } catch (error) {
+        showToast('다운로드 중 오류가 발생했습니다.');
+        console.error(error);
+    }
+});
+
+    </script>
+</body>
+</html>
