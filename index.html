@@ -1579,9 +1579,7 @@
                 department: selectedDepartment,
                 part1Score: part1Score,
                 part2Score: part2Score,
-                resultType: resultTypes[resultType].name,
-                part1Answers: answers.slice(0, questions.part1.length),
-                part2Answers: answers.slice(questions.part1.length)
+                resultType: resultTypes[resultType].name
             };
 
             try {
@@ -1699,7 +1697,7 @@
         // 관리자 데이터 로드
         let adminData = [];
 
-        async async function loadAdminData() {
+        async function loadAdminData() {
             try {
                 const response = await fetch(`${SCRIPT_URL}?action=getData`);
                 const result = await response.json();
