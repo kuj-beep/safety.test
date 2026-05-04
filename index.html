@@ -1878,36 +1878,30 @@
             }
         });
 
-        // 엑셀 다운로드 (구글 스프레드시트)
-        document.getElementById('downloadExcelBtn').addEventListener('click', function() {
-            if (adminData.length === 0) {
-                showToast('다운로드할 데이터가 없습니다.');
-                return;
-            }
-
-            // 구글 스프레드시트 다운로드 URL 요청
+        // 엑셀 다운로드
+        document.getElementById('downloadExcelBtn').addEventListener('click', async function() {
             showToast('구글 스프레드시트를 다운로드합니다...');
 
-            // 서버에 엑셀 다운로드 요청
-            fetch(`${SCRIPT_URL}?action=downloadExcel`)
-                .then(response => response.json())
-                .then(result => {
-                    if (result.success && result.downloadUrl) {
-                        // 새 탭에서 스프레드시트 다운로드 링크 열기
-                        window.open(result.downloadUrl, '_blank');
-                        showToast('구글 스프레드시트 다운로드가 시작됩니다.');
-                    } else {
-                        // 서버에서 URL을 제공하지 않는 경우, 직접 스프레드시트 열기
-                        window.open(`${SCRIPT_URL}?action=downloadExcel`, '_blank');
-                        showToast('구글 스프레드시트로 이동합니다.');
-                    }
-                })
-                .catch(error => {
-                    console.log('다운로드 요청 중 오류:', error);
-                    // 오류 시에도 직접 시도
-                    window.open(`${SCRIPT_URL}?action=downloadExcel`, '_blank');
-                    showToast('구글 스프레드시트로 이동합니다.');
-                });
+            try {
+                const response = await fetch(`${SCRIPT_URL}?action=downloadExcel`);
+                const result = await response.json();
+
+                if (result.success && result.downloadUrl) {
+                    window.open(result.downloadUrl, '_blank');
+                    showToast('엑셀 파일 다운로드가 시작됩니다.');
+                } else {
+                    // 직접 URL로 다운로드
+                    const directUrl = 'https://docs.google.com/spreadsheets/d/1kOYyu6t4y3jxZhSlHfSTfJFBHfyMqLO1sDTvlWA0AsE/export?format=xlsx';
+                    window.open(directUrl, '_blank');
+                    showToast('엑셀 파일 다운로드가 시작됩니다.');
+                }
+            } catch (error) {
+                console.error('다운로드 오류:', error);
+                // 직접 URL로 다운로드 시도
+                const directUrl = 'https://docs.google.com/spreadsheets/d/1kOYyu6t4y3jxZhSlHfSTfJFBHfyMqLO1sDTvlWA0AsE/export?format=xlsx';
+                window.open(directUrl, '_blank');
+                showToast('엑셀 파일 다운로드가 시작됩니다.');
+            }
         });
     </script>
 </body>
