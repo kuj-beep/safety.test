@@ -1575,6 +1575,7 @@
         async function saveResult() {
             const data = {
                 action: 'save',
+                timestamp: new Date().toLocaleString('ko-KR'),
                 department: selectedDepartment,
                 part1Score: part1Score,
                 part2Score: part2Score,
@@ -1698,7 +1699,7 @@
         // 관리자 데이터 로드
         let adminData = [];
 
-        async function loadAdminData() {
+        async async function loadAdminData() {
             try {
                 const response = await fetch(`${SCRIPT_URL}?action=getData`);
                 const result = await response.json();
