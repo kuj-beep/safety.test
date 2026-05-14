@@ -1224,19 +1224,19 @@
                     <span class="axis-max-x">5</span>
                     <div class="quadrant-chart" id="quadrantChart">
                         <div class="quadrant quadrant-pioneer">
-                            <span class="quadrant-title">안전감 개척자</span>
+                            <span class="quadrant-title">개척자</span>
                             <span class="quadrant-subtitle">Pioneer</span>
                         </div>
                         <div class="quadrant quadrant-cocreator">
-                            <span class="quadrant-title">안전감 공동창출자</span>
+                            <span class="quadrant-title">공동창출자</span>
                             <span class="quadrant-subtitle">Co-Creator</span>
                         </div>
                         <div class="quadrant quadrant-drifter">
-                            <span class="quadrant-title">안전감 표류자</span>
+                            <span class="quadrant-title">표류자</span>
                             <span class="quadrant-subtitle">Drifter</span>
                         </div>
                         <div class="quadrant quadrant-beneficiary">
-                            <span class="quadrant-title">안전감 수혜자</span>
+                            <span class="quadrant-title">수혜자</span>
                             <span class="quadrant-subtitle">Beneficiary</span>
                         </div>
                         <div class="my-position" id="myPosition"></div>
@@ -1265,7 +1265,7 @@
             <div class="interpret-container">
                 <div class="type-header">
                     <span class="type-badge">나의 유형</span>
-                    <h2 class="type-name" id="typeName">안전감 공동창출자</h2>
+                    <h2 class="type-name" id="typeName">공동창출자</h2>
                     <p class="type-name-en" id="typeNameEn">Co-Creator</p>
                 </div>
                 <div class="interpret-card">
@@ -1372,7 +1372,7 @@
         // 결과 유형 데이터
         const resultTypes = {
             "co-creator": {
-                name: "안전감 공동창출자",
+                name: "공동창출자",
                 nameEn: "Co-Creator",
                 desc: "스스로 팀 안에서 충분한 심리적 안전감을 경험하면서, 동시에 자신의 말과 행동을 통해 동료에게도 안전감을 만들어 주는 사람입니다. 받은 것을 누리는 데 그치지 않고, 그것을 다시 주변으로 환원하는 선순환의 주체입니다.",
                 strengths: [
@@ -1383,7 +1383,7 @@
                 ]
             },
             "beneficiary": {
-                name: "안전감 수혜자",
+                name: "수혜자",
                 nameEn: "Beneficiary",
                 desc: "팀이 제공하는 심리적 안전감의 혜택은 충분히 누리고 있지만, 본인이 동료에게 안전감을 만들어 주는 행동은 상대적으로 부족합니다. 안전한 환경에 잘 적응한 구성원이지만, 아직 그 안전감의 공급자(supplier)로는 자리 잡지 못한 단계입니다.",
                 strengths: [
@@ -1393,7 +1393,7 @@
                 ]
             },
             "pioneer": {
-                name: "안전감 개척자",
+                name: "개척자",
                 nameEn: "Pioneer",
                 desc: "본인이 느끼는 심리적 안전감은 낮지만, 그럼에도 불구하고 동료에게 안전감을 만들어 주려고 노력하는 사람입니다. 받은 것이 적음에도 먼저 베푸는 행동을 시작한 변화의 씨앗이며, 팀 문화 전환의 가장 강력한 촉매가 될 수 있는 유형입니다.",
                 strengths: [
@@ -1404,7 +1404,7 @@
                 ]
             },
             "drifter": {
-                name: "안전감 표류자",
+                name: "표류자",
                 nameEn: "Drifter",
                 desc: "스스로도 팀 안에서 안전감을 충분히 느끼지 못하고, 동료에게도 안전감을 만들어 주는 행동이 부족한 상태입니다. 환경과 행동 모두에서 단절·고립의 신호가 감지되는 상태로, 개인의 노력만으로는 회복이 어렵고 팀·리더 차원의 적극적 개입이 가장 시급한 그룹입니다.",
                 strengths: [
@@ -1933,10 +1933,10 @@
             }
 
             const typeCount = {
-                '안전감 공동창출자': 0,
-                '안전감 수혜자': 0,
-                '안전감 개척자': 0,
-                '안전감 표류자': 0
+                '공동창출자': 0,
+                '수혜자': 0,
+                '개척자': 0,
+                '표류자': 0
             };
 
             adminData.forEach(item => {
