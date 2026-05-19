@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>심리적 안전감 진단</title>
+    <title>심리적 안정감 진단</title>
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://docs.google.com;">
     <style>
         * {
@@ -1100,11 +1100,11 @@
         <div class="start-screen">
             <a href="#" class="admin-link" id="adminLink">관리자</a>
             <div class="badge">OURHOME Culture Trip</div>
-            <h1 class="start-title">나의 심리적안전감<br>진단하기</h1>
+            <h1 class="start-title">나의 심리적안정감<br>진단하기</h1>
             <p class="start-description">
                 나는 우리팀에서 얼마나 안전하다고 느끼고 있을까요?<br>
-                그리고 나는 동료에게 얼마나 안전감을 주고 있을까요?<br><br>
-                간단한 진단을 통해 나의 심리적 안전감 점수를 확인해보세요!
+                그리고 나는 동료에게 얼마나 안정감을 주고 있을까요?<br><br>
+                간단한 진단을 통해 나의 심리적 안정감 점수를 확인해보세요!
             </p>
             <div class="input-card">
                 <label class="input-label">소속 사업부를 선택해주세요</label>
@@ -1158,7 +1158,7 @@
     <div class="screen" id="part1IntroScreen">
         <div class="part-intro-screen">
             <div class="part-intro-container">
-                <h2 class="part-intro-title">Part 1 : 내가 느끼는 안전감</h2>
+                <h2 class="part-intro-title">Part 1 : 내가 느끼는 안정감</h2>
                 <p class="part-intro-desc">
                     먼저 Part 1입니다.<br><br>
                     나는 우리 팀에서 얼마나 안전감을 느끼는지<br>
@@ -1173,10 +1173,10 @@
     <div class="screen" id="part2IntroScreen">
         <div class="part-intro-screen">
             <div class="part-intro-container">
-                <h2 class="part-intro-title">Part 2 : 내가 만드는 안전감</h2>
+                <h2 class="part-intro-title">Part 2 : 내가 만드는 안정감</h2>
                 <p class="part-intro-desc">
                     이제 Part 2입니다.<br><br>
-                    나는 동료에게 얼마나 안전감을 주고 있는지<br>
+                    나는 동료에게 얼마나 안정감을 주고 있는지<br>
                     총 10개 문항에 응답해주세요.
                 </p>
                 <button class="part-intro-btn" id="part2StartBtn">계속하기</button>
@@ -1190,7 +1190,7 @@
             <div class="assessment-container">
                 <div class="progress-section">
                     <div class="progress-header">
-                        <span class="part-label" id="partLabel">Part 1 : 내가 느끼는 안전감</span>
+                        <span class="part-label" id="partLabel">Part 1 : 내가 느끼는 안정감</span>
                         <span class="progress-text" id="progressText">1 / 17</span>
                     </div>
                     <div class="progress-bar">
@@ -1215,7 +1215,7 @@
     <div class="screen" id="resultScreen">
         <div class="result-screen">
             <div class="result-container">
-                <h2 class="result-title">심리적 안전감 진단 결과</h2>
+                <h2 class="result-title">심리적 안정감 진단 결과</h2>
                 <div class="chart-wrapper">
                     <span class="axis-label-y">Part 2</span>
                     <span class="axis-max-y">5</span>
@@ -1488,10 +1488,10 @@
             let question;
             if (isPart1) {
                 question = questions.part1[currentQuestionIndex];
-                document.getElementById('partLabel').textContent = 'Part 1 : 내가 느끼는 안전감';
+                document.getElementById('partLabel').textContent = 'Part 1 : 내가 느끼는 안정감';
             } else {
                 question = questions.part2[currentQuestionIndex - questions.part1.length];
-                document.getElementById('partLabel').textContent = 'Part 2 : 내가 만드는 안전감';
+                document.getElementById('partLabel').textContent = 'Part 2 : 내가 만드는 안정감';
             }
 
             document.getElementById('progressText').textContent = `${currentQuestionIndex + 1} / ${totalQuestions}`;
