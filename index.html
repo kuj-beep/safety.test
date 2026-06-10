@@ -1509,19 +1509,14 @@
 
             optionsList.innerHTML = options.map(opt => `
                 <div class="option-item">
-                    <input type="radio" class="option-input" name="answer" id="opt${opt.score}" value="${opt.score}" 
+                    <input type="radio" class="option-input" name="answer_${currentQuestionIndex}" id="opt${currentQuestionIndex}_${opt.score}" value="${opt.score}" 
                         ${answers[currentQuestionIndex] === opt.score ? 'checked' : ''}>
-                    <label class="option-label" for="opt${opt.score}">
+                    <label class="option-label" for="opt${currentQuestionIndex}_${opt.score}">
                         <span class="option-score">${opt.score}</span>
                         <span class="option-text">${opt.text}</span>
                     </label>
                 </div>
             `).join('');
-            
-// ↓ 이 코드 추가 (모바일 라디오 버튼 캐시 초기화)
-document.querySelectorAll('.option-input').forEach(input => {
-    input.checked = answers[currentQuestionIndex] === parseInt(input.value);
-});
             
             // 라디오 버튼 이벤트
             document.querySelectorAll('.option-input').forEach(input => {
