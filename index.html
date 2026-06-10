@@ -1517,7 +1517,12 @@
                     </label>
                 </div>
             `).join('');
-
+            
+// ↓ 이 코드 추가 (모바일 라디오 버튼 캐시 초기화)
+document.querySelectorAll('.option-input').forEach(input => {
+    input.checked = answers[currentQuestionIndex] === parseInt(input.value);
+});
+            
             // 라디오 버튼 이벤트
             document.querySelectorAll('.option-input').forEach(input => {
                 input.addEventListener('change', function() {
